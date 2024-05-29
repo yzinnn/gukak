@@ -40,6 +40,48 @@
             height: 360px; /* 2cm 줄임 */
         }
         #instrumentContainer {
+            display: flex;<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>육보 리듬 게임</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+        }
+        .instrument {
+            display: inline-block;
+            margin: 0;
+            position: relative;
+        }
+        .instrument img {
+            width: 80px;
+            height: 80px;
+            cursor: pointer;
+        }
+        .note {
+            position: absolute;
+            width: 80px;
+            height: 80px;
+        }
+        #inputForm {
+            margin-bottom: 10px;
+        }
+        #rythmInput {
+            height: auto;
+            overflow: auto;
+        }
+        #gameCanvas {
+            border: 1px solid #000;
+            display: block;
+            margin: 0 auto;
+            position: relative;
+            width: 320px;
+            height: 360px;
+        }
+        #instrumentContainer {
             display: flex;
             justify-content: center;
             align-items: flex-end;
@@ -47,6 +89,7 @@
             bottom: 0;
             width: 100%;
             height: 120px;
+            top: 240px; /* 게임 캔버스와 함께 이동 */
         }
         .instrument {
             display: flex;
@@ -55,10 +98,10 @@
         }
         #score {
             margin-top: 5px;
-            font-size: 18px; /* 글씨 크기 조정 */
+            font-size: 18px;
         }
         h1 {
-            font-size: 20px; /* 제목 글씨 크기 조정 */
+            font-size: 20px;
         }
     </style>
 </head>
@@ -167,19 +210,17 @@
         }
 
         function playSound(note) {
-            for (const instrument in instrumentSounds) {
-                if (instrumentSounds[instrument][note]) {
-                    instrumentSounds[instrument][note].play().catch(error => {
-                        console.log(`Error playing sound: ${error}`);
-                    });
-                }
+            const sound = instrumentSounds[noteToInstrument(note)][note];
+            if (sound) {
+                sound.currentTime = 0; // play from start
+                sound.play().catch(error => console.error(`Error playing sound: ${error}`));
             }
         }
 
         function drawNotes() {
             ctx.clearRect(0, 0, canvas.width, canvas.height);
             ctx.fillStyle = 'black';
-            ctx.fillRect(0, 260, canvas.width, 5);  // 타점 선을 더 위로 이동
+            ctx.fillRect(0, 250, canvas.width, 5);  // 타점 선을 더 위로 이동
             notes.forEach(note => {
                 note.y += 2;
                 ctx.fillStyle = noteColor(note.id);
@@ -200,7 +241,7 @@
         }
 
         function checkHit(instrumentId) {
-            const threshold = 260;
+            const threshold = 250;
             notes = notes.filter(note => {
                 if (note.y > threshold && note.y < threshold + 80 && note.id === instrumentId) {
                     playSound(note.text);
