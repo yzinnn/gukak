@@ -15,14 +15,14 @@
             position: relative;
         }
         .instrument img {
-            width: 60px;
-            height: 60px;
+            width: 80px;
+            height: 80px;
             cursor: pointer;
         }
         .note {
             position: absolute;
-            width: 60px;
-            height: 60px;
+            width: 80px;
+            height: 80px;
         }
         #inputForm {
             margin-bottom: 20px;
@@ -32,22 +32,26 @@
             display: block;
             margin: 0 auto;
             position: relative;
-            width: 240px;
-            height: 320px; /* 기존보다 5cm 감소 */
+            width: 320px;
+            height: 480px;
         }
         #instrumentContainer {
             display: flex;
             justify-content: center;
             align-items: flex-end;
             position: absolute;
-            bottom: 10px; /* 하단에서 약 0.3cm 띄움 */
+            bottom: 0;
             width: 100%;
-            height: 60px; /* 악기 그림 및 텍스트 높이 */
+            height: 120px;
         }
         .instrument {
             display: flex;
             flex-direction: column;
             align-items: center;
+        }
+        #score {
+            margin-top: 10px;
+            font-size: 24px;
         }
     </style>
 </head>
@@ -58,7 +62,8 @@
         <input type="text" id="rythmInput" placeholder="예: 갠 지 덩 쿵 덕">
         <button onclick="startGame()">시작</button>
     </div>
-    <canvas id="gameCanvas" width="240" height="320"></canvas>
+    <p id="score">점수: 0</p>
+    <canvas id="gameCanvas" width="320" height="480"></canvas>
     <div id="instrumentContainer">
         <div class="instrument" id="kkwaenggari">
             <img src="Kkwaenggwari.jpg" alt="꽹가리">
@@ -77,7 +82,6 @@
             <p>장구</p>
         </div>
     </div>
-    <p id="score">점수: 0</p>
     <audio id="audio_kkwaenggwari_gan" src="Kkwaenggwari_gang_1.mp3" preload="auto"></audio>
     <audio id="audio_kkwaenggwari_ji" src="Kkwaenggwari_ji_1.mp3" preload="auto"></audio>
     <audio id="audio_jing_jing" src="jing_1.mp3" preload="auto"></audio>
@@ -131,8 +135,8 @@
             userInput = document.getElementById('rythmInput').value.split(' ');
             notes = userInput.map((note, index) => {
                 const instrument = noteToInstrument(note);
-                const x = instrumentIds.indexOf(instrument) * 60;
-                return { x: x, y: -60 * (index + 1), id: instrument, text: note };
+                const x = instrumentIds.indexOf(instrument) * 80;
+                return { x: x, y: -80 * (index + 1), id: instrument, text: note };
             });
             score = 0;
             document.getElementById('score').textContent = '점수: ' + score;
@@ -162,13 +166,13 @@
         function drawNotes() {
             ctx.clearRect(0, 0, canvas.width, canvas.height);
             ctx.fillStyle = 'black';
-            ctx.fillRect(0, 250, canvas.width, 10);  // 타점 선을 그림 위로 0.3cm 이동
+            ctx.fillRect(0, 410, canvas.width, 10);  // 타점 선을 그림 위로 0.7cm 이동
             notes.forEach(note => {
                 note.y += 2;
                 ctx.fillStyle = noteColor(note.id);
-                ctx.fillRect(note.x, note.y, 60, 60);
+                ctx.fillRect(note.x, note.y, 80, 80);
                 ctx.fillStyle = 'white';
-                ctx.fillText(note.text, note.x + 5, note.y + 30);
+                ctx.fillText(note.text, note.x + 5, note.y + 50);
             });
         }
 
@@ -183,9 +187,9 @@
         }
 
         function checkHit(instrumentId) {
-            const threshold = 250;
+            const threshold = 410;
             notes = notes.filter(note => {
-                if (note.y > threshold && note.y < threshold + 60 && note.id === instrumentId) {
+                if (note.y > threshold && note.y < threshold + 80 && note.id === instrumentId) {
                     playSound(note.text);
                     score += 10;
                     document.getElementById('score').textContent = '점수: ' + score;
@@ -199,7 +203,9 @@
             drawNotes();
             if (notes.length === 0) {
                 clearInterval(gameInterval);
-                alert('게임 종료! 최종 점수: ' + score);
+                setTimeout(() => {
+                    alert('게임 종료! 최종 점수: ' + score);
+                }, 100); // 0.1초 후에 alert 호출
             }
         }
     </script>
