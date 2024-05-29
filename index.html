@@ -8,8 +8,6 @@
         body {
             font-family: Arial, sans-serif;
             text-align: center;
-            margin: 0;
-            padding: 0;
         }
         .instrument {
             display: inline-block;
@@ -19,7 +17,6 @@
         .instrument img {
             width: 100px;
             height: 100px;
-            cursor: pointer;
         }
         .note {
             position: absolute;
@@ -27,8 +24,7 @@
             height: 50px;
         }
         #inputForm {
-            margin-bottom: 10px;
-            padding-top: 10px;
+            margin-bottom: 20px;
         }
         #gameCanvas {
             border: 1px solid #000;
@@ -50,7 +46,7 @@
             position: absolute;
             width: 100%;
             height: 10px;
-            background-color: black;
+            background-color: red;
             bottom: 50px;
         }
     </style>
@@ -62,6 +58,8 @@
         <input type="text" id="rythmInput" placeholder="예: 갠 지 덩 쿵 덕">
         <button onclick="startGame()">시작</button>
     </div>
+    <canvas id="gameCanvas" width="800" height="600"></canvas>
+    <div class="hit-line" onclick="checkHit(event)"></div>
     <div id="instrumentContainer">
         <div class="instrument" id="kkwaenggari">
             <img src="Kkwaenggwari.jpg" alt="꽹가리">
@@ -80,7 +78,6 @@
             <p>장구</p>
         </div>
     </div>
-    <canvas id="gameCanvas" width="800" height="400"></canvas>
     <p id="score">점수: 0</p>
     <audio id="audio_kkwaenggwari_gan" src="/mnt/data/Kkwaenggwari_gang_1.mp3" preload="auto"></audio>
     <audio id="audio_kkwaenggwari_ji" src="/mnt/data/Kkwaenggwari_ji_1.mp3" preload="auto"></audio>
@@ -129,7 +126,7 @@
             notes = userInput.map((note, index) => {
                 const instrument = noteToInstrument(note);
                 const x = instrumentIds.indexOf(instrument) * 200 + 50;
-                return { x: x, y: 0, id: instrument, text: note };
+                return { x: x, y: -50 * (index + 1), id: instrument, text: note };
             });
             score = 0;
             document.getElementById('score').textContent = '점수: ' + score;
@@ -147,18 +144,16 @@
             return 'kkwaenggari';
         }
 
-        function playInstrument(instrument) {
-            const soundKeys = Object.keys(instrumentSounds[instrument]);
-            const randomKey = soundKeys[Math.floor(Math.random() * soundKeys.length)];
-            instrumentSounds[instrument][randomKey].play();
-            score += 10;
-            document.getElementById('score').textContent = '점수: ' + score;
+        function playSound(note) {
+            for (const instrument in instrumentSounds) {
+                if (instrumentSounds[instrument][note]) {
+                    instrumentSounds[instrument][note].play();
+                }
+            }
         }
 
         function drawNotes() {
             ctx.clearRect(0, 0, canvas.width, canvas.height);
-            ctx.fillStyle = 'black';
-            ctx.fillRect(0, 350, canvas.width, 10);  // 타점 선을 굵게 설정
             notes.forEach(note => {
                 note.y += 2;
                 ctx.fillStyle = noteColor(note.id);
@@ -178,6 +173,19 @@
             }
         }
 
+        function checkHit(event) {
+            const threshold = 550;
+            notes.forEach(note => {
+                if (note.y > threshold && note.y < threshold + 50) {
+                    playSound(note.text);
+                    score += 10;
+                    document.getElementById('score').textContent = '점수: ' + score;
+                    note.hit = true;
+                }
+            });
+            notes = notes.filter(note => !note.hit);
+        }
+
         function gameLoop() {
             drawNotes();
             if (notes.length === 0) {
@@ -185,13 +193,6 @@
                 alert('게임 종료! 최종 점수: ' + score);
             }
         }
-
-        instrumentElements.forEach(inst => {
-            inst.addEventListener('click', () => {
-                const id = inst.parentElement.id;
-                playInstrument(id);
-            });
-        });
     </script>
 </body>
 </html>
