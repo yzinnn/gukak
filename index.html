@@ -15,8 +15,8 @@
             position: relative;
         }
         .instrument img {
-            width: 50px;
-            height: 50px;
+            width: 100px;
+            height: 100px;
             cursor: pointer;
         }
         .note {
@@ -36,11 +36,8 @@
         #instrumentContainer {
             display: flex;
             justify-content: center;
-            align-items: flex-end;
-            position: absolute;
-            bottom: 0;
-            width: 100%;
-            height: 100px;
+            position: relative;
+            margin-top: 20px;
         }
         .instrument {
             display: flex;
@@ -108,7 +105,7 @@
             }
         };
 
-        const instrumentElements = document.querySelectorAll('.instrument');
+        const instrumentElements = document.querySelectorAll('.instrument img');
         const instrumentIds = ['kkwaenggari', 'jing', 'buk', 'janggu'];
 
         let score = 0;
@@ -117,13 +114,6 @@
         const canvas = document.getElementById('gameCanvas');
         const ctx = canvas.getContext('2d');
         let gameInterval;
-
-        instrumentElements.forEach(inst => {
-            inst.addEventListener('click', () => {
-                const id = inst.id;
-                checkHit(id);
-            });
-        });
 
         function startGame() {
             userInput = document.getElementById('rythmInput').value.split(' ');
@@ -179,17 +169,17 @@
             }
         }
 
-        function checkHit(instrumentId) {
+        function checkHit() {
             const threshold = 550;
-            notes = notes.filter(note => {
-                if (note.y > threshold && note.y < threshold + 50 && note.id === instrumentId) {
+            notes.forEach(note => {
+                if (note.y > threshold && note.y < threshold + 50) {
                     playSound(note.text);
                     score += 10;
                     document.getElementById('score').textContent = '점수: ' + score;
-                    return false;
+                    note.hit = true;
                 }
-                return true;
             });
+            notes = notes.filter(note => !note.hit);
         }
 
         function gameLoop() {
@@ -199,6 +189,8 @@
                 alert('게임 종료! 최종 점수: ' + score);
             }
         }
+
+        canvas.addEventListener('click', checkHit);
     </script>
 </body>
 </html>
