@@ -25,15 +25,16 @@
             height: 80px;
         }
         #inputForm {
-            margin-bottom: 20px;
+            margin-bottom: 10px;
         }
         #rythmInput {
-            height: 50px; /* 높이를 두 배로 늘림 */
+            height: auto; /* 높이를 자동으로 조절 */
+            overflow: auto; /* 스크롤바를 자동으로 표시 */
         }
         #gameCanvas {
             border: 1px solid #000;
             display: block;
-            margin: 20px auto; /* 여유 공간 추가 */
+            margin: 0 auto;
             position: relative;
             width: 320px;
             height: 400px;
@@ -53,8 +54,8 @@
             align-items: center;
         }
         #score {
-            margin-top: 10px; /* 여유 공간 추가 */
-            font-size: 22px; /* 글씨 크기 조정 */
+            margin-top: 5px;
+            font-size: 22px;
         }
     </style>
 </head>
@@ -62,7 +63,7 @@
     <h1>육보 리듬 게임</h1>
     <div id="inputForm">
         <label for="rythmInput">육보 입력:</label>
-        <input type="text" id="rythmInput" placeholder="예: 갠 지 덩 쿵 덕">
+        <textarea id="rythmInput" placeholder="예: 갠 지 덩 쿵 덕" rows="1" oninput="autoGrow(this)"></textarea>
         <button onclick="startGame()">시작</button>
     </div>
     <p id="score">점수: 0</p>
@@ -96,6 +97,11 @@
     <audio id="audio_janggu_durururu" src="janggu_durururu_1.mp3" preload="auto"></audio>
     <audio id="audio_janggu_duk" src="janggu_duk_1.mp3" preload="auto"></audio>
     <script>
+        function autoGrow(element) {
+            element.style.height = "auto";
+            element.style.height = (element.scrollHeight) + "px";
+        }
+
         const instrumentSounds = {
             kkwaenggari: {
                 '갠': document.getElementById('audio_kkwaenggwari_gan'),
@@ -168,7 +174,7 @@
         function drawNotes() {
             ctx.clearRect(0, 0, canvas.width, canvas.height);
             ctx.fillStyle = 'black';
-            ctx.fillRect(0, 290, canvas.width, 5);  // 타점 선을 그림 위로 0.1cm 이동
+            ctx.fillRect(0, 285, canvas.width, 5);  // 타점 선을 그림 위로 0.1cm 이동
             notes.forEach(note => {
                 note.y += 2;
                 ctx.fillStyle = noteColor(note.id);
@@ -189,7 +195,7 @@
         }
 
         function checkHit(instrumentId) {
-            const threshold = 290;
+            const threshold = 285;
             notes = notes.filter(note => {
                 if (note.y > threshold && note.y < threshold + 80 && note.id === instrumentId) {
                     playSound(note.text);
