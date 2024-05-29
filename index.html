@@ -139,6 +139,10 @@
             gameInterval = setInterval(gameLoop, 20);
         }
 
+        function createNote(instrument, x) {
+            notes.push({ x: x, y: 0, id: instrument, text: '' });
+        }
+
         function noteToInstrument(note) {
             if (['갠', '지'].includes(note)) return 'kkwaenggari';
             if (note === '징') return 'jing';
@@ -190,10 +194,13 @@
             }
         }
 
+        // 클릭 이벤트 리스너에 새로운 기능을 추가하겠습니다.
         instrumentElements.forEach(inst => {
             inst.addEventListener('click', () => {
                 const id = inst.parentElement.id;
-                playInstrument(id);
+                const x = instrumentIds.indexOf(id) * 200 + 50;
+                playInstrument(id); // 악기 소리 재생
+                createNote(id, x); // 새로운 노트 생성
             });
         });
     </script>
