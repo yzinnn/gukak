@@ -11,18 +11,18 @@
         }
         .instrument {
             display: inline-block;
-            margin: 10px;
+            margin: 0;
             position: relative;
         }
         .instrument img {
-            width: 50px;
-            height: 50px;
+            width: 80px;
+            height: 80px;
             cursor: pointer;
         }
         .note {
             position: absolute;
-            width: 50px;
-            height: 50px;
+            width: 80px;
+            height: 80px;
         }
         #inputForm {
             margin-bottom: 20px;
@@ -32,6 +32,8 @@
             display: block;
             margin: 0 auto;
             position: relative;
+            width: 320px;
+            height: 480px; /* 기존보다 5cm 감소 */
         }
         #instrumentContainer {
             display: flex;
@@ -56,7 +58,7 @@
         <input type="text" id="rythmInput" placeholder="예: 갠 지 덩 쿵 덕">
         <button onclick="startGame()">시작</button>
     </div>
-    <canvas id="gameCanvas" width="800" height="600"></canvas>
+    <canvas id="gameCanvas" width="320" height="480"></canvas>
     <div id="instrumentContainer">
         <div class="instrument" id="kkwaenggari">
             <img src="Kkwaenggwari.jpg" alt="꽹가리">
@@ -129,8 +131,8 @@
             userInput = document.getElementById('rythmInput').value.split(' ');
             notes = userInput.map((note, index) => {
                 const instrument = noteToInstrument(note);
-                const x = instrumentIds.indexOf(instrument) * 200 + 50;
-                return { x: x, y: -50 * (index + 1), id: instrument, text: note };
+                const x = instrumentIds.indexOf(instrument) * 80;
+                return { x: x, y: -80 * (index + 1), id: instrument, text: note };
             });
             score = 0;
             document.getElementById('score').textContent = '점수: ' + score;
@@ -159,13 +161,13 @@
         function drawNotes() {
             ctx.clearRect(0, 0, canvas.width, canvas.height);
             ctx.fillStyle = 'black';
-            ctx.fillRect(0, 550, canvas.width, 10);  // 타점 선을 굵게 설정
+            ctx.fillRect(0, 410, canvas.width, 10);  // 타점 선을 그림 위로 0.7cm 이동
             notes.forEach(note => {
                 note.y += 2;
                 ctx.fillStyle = noteColor(note.id);
-                ctx.fillRect(note.x, note.y, 50, 50);
+                ctx.fillRect(note.x, note.y, 80, 80);
                 ctx.fillStyle = 'white';
-                ctx.fillText(note.text, note.x + 5, note.y + 30);
+                ctx.fillText(note.text, note.x + 5, note.y + 50);
             });
         }
 
@@ -180,9 +182,9 @@
         }
 
         function checkHit(instrumentId) {
-            const threshold = 550;
+            const threshold = 410;
             notes = notes.filter(note => {
-                if (note.y > threshold && note.y < threshold + 50 && note.id === instrumentId) {
+                if (note.y > threshold && note.y < threshold + 80 && note.id === instrumentId) {
                     playSound(note.text);
                     score += 10;
                     document.getElementById('score').textContent = '점수: ' + score;
