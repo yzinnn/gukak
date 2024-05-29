@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>리듬 게임</title>
+    <title>육보 챌린지지</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -26,6 +26,10 @@
         }
         #inputForm {
             margin-bottom: 20px;
+            height: 40px; /* 높이를 두 배로 늘림 */
+        }
+        #rythmInput {
+            height: 100%;
         }
         #gameCanvas {
             border: 1px solid #000;
@@ -33,7 +37,7 @@
             margin: 0 auto;
             position: relative;
             width: 320px;
-            height: 480px;
+            height: 450px; /* 기존보다 높이를 줄임 */
         }
         #instrumentContainer {
             display: flex;
@@ -50,8 +54,9 @@
             align-items: center;
         }
         #score {
-            margin-top: 10px;
-            font-size: 24px;
+            margin-top: 5px; /* 간격 줄임 */
+            margin-bottom: 5px; /* 간격 줄임 */
+            font-size: 22px; /* 글씨 크기를 줄임 */
         }
     </style>
 </head>
@@ -63,7 +68,7 @@
         <button onclick="startGame()">시작</button>
     </div>
     <p id="score">점수: 0</p>
-    <canvas id="gameCanvas" width="320" height="480"></canvas>
+    <canvas id="gameCanvas" width="320" height="450"></canvas>
     <div id="instrumentContainer">
         <div class="instrument" id="kkwaenggari">
             <img src="Kkwaenggwari.jpg" alt="꽹가리">
@@ -82,7 +87,7 @@
             <p>장구</p>
         </div>
     </div>
-    <audio id="audio_kkwaenggwari_gan" src="Kkwaenggwari_gang_1.mp3" preload="auto"></audio>
+    <audio id="audio_kkwaenggwari_gan" src="Kkwaenggwari_gan_1.mp3" preload="auto"></audio>
     <audio id="audio_kkwaenggwari_ji" src="Kkwaenggwari_ji_1.mp3" preload="auto"></audio>
     <audio id="audio_jing_jing" src="jing_1.mp3" preload="auto"></audio>
     <audio id="audio_buk_dung" src="buk_dung.mp3" preload="auto"></audio>
@@ -166,7 +171,7 @@
         function drawNotes() {
             ctx.clearRect(0, 0, canvas.width, canvas.height);
             ctx.fillStyle = 'black';
-            ctx.fillRect(0, 410, canvas.width, 10);  // 타점 선을 그림 위로 0.7cm 이동
+            ctx.fillRect(0, 300, canvas.width, 10);  // 타점 선을 그림 위로 0.3cm 이동
             notes.forEach(note => {
                 note.y += 2;
                 ctx.fillStyle = noteColor(note.id);
@@ -187,7 +192,7 @@
         }
 
         function checkHit(instrumentId) {
-            const threshold = 410;
+            const threshold = 300;
             notes = notes.filter(note => {
                 if (note.y > threshold && note.y < threshold + 80 && note.id === instrumentId) {
                     playSound(note.text);
