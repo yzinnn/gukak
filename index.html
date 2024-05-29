@@ -13,48 +13,7 @@
             display: inline-block;
             margin: 0;
             position: relative;
-        }
-        .instrument img {
-            width: 80px;
-            height: 80px;
-            cursor: pointer;
-        }
-        .note {
-            position: absolute;
-            width: 80px;
-            height: 80px;
-        }
-        #inputForm {
-            margin-bottom: 10px;
-        }
-        #rythmInput {
-            height: auto; /* 높이를 자동으로 조절 */
-            overflow: auto; /* 스크롤바를 자동으로 표시 */
-        }
-        #gameCanvas {
-            border: 1px solid #000;
-            display: block;
-            margin: 0 auto;
-            position: relative;
-            width: 320px;
-            height: 360px; /* 2cm 줄임 */
-        }
-        #instrumentContainer {
-            display: flex;<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>육보 리듬 게임</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            text-align: center;
-        }
-        .instrument {
-            display: inline-block;
-            margin: 0;
-            position: relative;
+            text-align: right; /* 오른쪽으로 정렬 */
         }
         .instrument img {
             width: 80px;
@@ -89,12 +48,12 @@
             bottom: 0;
             width: 100%;
             height: 120px;
-            top: 240px; /* 게임 캔버스와 함께 이동 */
+            top: 240px;
         }
         .instrument {
             display: flex;
             flex-direction: column;
-            align-items: center;
+            align-items: flex-end; /* 오른쪽 정렬 */
         }
         #score {
             margin-top: 5px;
@@ -116,32 +75,32 @@
     <canvas id="gameCanvas" width="320" height="360"></canvas>
     <div id="instrumentContainer">
         <div class="instrument" id="kkwaenggari">
-            <img src="Kkwaenggwari.jpg" alt="꽹가리">
+            <img src="kukak/Kkwaenggwari.jpg" alt="꽹가리">
             <p>꽹가리</p>
         </div>
         <div class="instrument" id="jing">
-            <img src="jing.jpeg" alt="징">
+            <img src="kukak/jing.jpeg" alt="징">
             <p>징</p>
         </div>
         <div class="instrument" id="buk">
-            <img src="buk.png" alt="북">
+            <img src="kukak/buk.png" alt="북">
             <p>북</p>
         </div>
         <div class="instrument" id="janggu">
-            <img src="janggu.jpg" alt="장구">
+            <img src="kukak/janggu.jpg" alt="장구">
             <p>장구</p>
         </div>
     </div>
-    <audio id="audio_kkwaenggwari_gan" src="Kkwaenggwari_gan_1.mp3" preload="auto"></audio>
-    <audio id="audio_kkwaenggwari_ji" src="Kkwaenggwari_ji_1.mp3" preload="auto"></audio>
-    <audio id="audio_jing_jing" src="jing_1.mp3" preload="auto"></audio>
-    <audio id="audio_buk_dung" src="buk_dung.mp3" preload="auto"></audio>
-    <audio id="audio_buk_du" src="buk_du.mp3" preload="auto"></audio>
-    <audio id="audio_janggu_dung" src="janggu_dung_1.mp3" preload="auto"></audio>
-    <audio id="audio_janggu_giduk" src="janggu_giduk_1.mp3" preload="auto"></audio>
-    <audio id="audio_janggu_kung" src="janggu_kung_1.mp3" preload="auto"></audio>
-    <audio id="audio_janggu_durururu" src="janggu_durururu_1.mp3" preload="auto"></audio>
-    <audio id="audio_janggu_duk" src="janggu_duk_1.mp3" preload="auto"></audio>
+    <audio id="audio_kkwaenggwari_gan" src="kukak/Kkwaenggwari_gan_1.mp3" preload="auto"></audio>
+    <audio id="audio_kkwaenggwari_ji" src="kukak/Kkwaenggwari_ji_1.mp3" preload="auto"></audio>
+    <audio id="audio_jing_jing" src="kukak/jing_1.mp3" preload="auto"></audio>
+    <audio id="audio_buk_dung" src="kukak/buk_dung.mp3" preload="auto"></audio>
+    <audio id="audio_buk_du" src="kukak/buk_du.mp3" preload="auto"></audio>
+    <audio id="audio_janggu_dung" src="kukak/janggu_dung_1.mp3" preload="auto"></audio>
+    <audio id="audio_janggu_giduk" src="kukak/janggu_giduk_1.mp3" preload="auto"></audio>
+    <audio id="audio_janggu_kung" src="kukak/janggu_kung_1.mp3" preload="auto"></audio>
+    <audio id="audio_janggu_durururu" src="kukak/janggu_durururu_1.mp3" preload="auto"></audio>
+    <audio id="audio_janggu_duk" src="kukak/janggu_duk_1.mp3" preload="auto"></audio>
     <script>
         function autoGrow(element) {
             element.style.height = "auto";
