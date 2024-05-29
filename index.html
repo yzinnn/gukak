@@ -82,16 +82,16 @@
     </div>
     <canvas id="gameCanvas" width="800" height="400"></canvas>
     <p id="score">점수: 0</p>
-    <audio id="audio_kkwaenggwari_gan" src="/mnt/data/Kkwaenggwari_gang_1.wav" preload="auto"></audio>
-    <audio id="audio_kkwaenggwari_ji" src="/mnt/data/Kkwaenggwari_ji_1.wav" preload="auto"></audio>
-    <audio id="audio_jing_jing" src="/mnt/data/Jing_1.wav" preload="auto"></audio>
-    <audio id="audio_buk_dung" src="/mnt/data/buk_dung.wav" preload="auto"></audio>
-    <audio id="audio_buk_du" src="/mnt/data/buk_du.wav" preload="auto"></audio>
-    <audio id="audio_janggu_dung" src="/mnt/data/Janggu_dung_1.wav" preload="auto"></audio>
-    <audio id="audio_janggu_giduk" src="/mnt/data/Janggu_giduk_1.wav" preload="auto"></audio>
-    <audio id="audio_janggu_kung" src="/mnt/data/Janggu_kung_1.wav" preload="auto"></audio>
-    <audio id="audio_janggu_durururu" src="/mnt/data/Janggu_durururu_1.wav" preload="auto"></audio>
-    <audio id="audio_janggu_duk" src="/mnt/data/Janggu_duk_1.wav" preload="auto"></audio>
+    <audio id="audio_kkwaenggwari_gan" src="https://yzinnn.github.io/gukak/audio/Kkwaenggwari_gang_1.mp3" preload="auto"></audio>
+    <audio id="audio_kkwaenggwari_ji" src="https://yzinnn.github.io/gukak/audio/Kkwaenggwari_ji_1.mp3" preload="auto"></audio>
+    <audio id="audio_jing_jing" src="https://yzinnn.github.io/gukak/audio/Jing_1.mp3" preload="auto"></audio>
+    <audio id="audio_buk_dung" src="https://yzinnn.github.io/gukak/audio/buk_dung.mp3" preload="auto"></audio>
+    <audio id="audio_buk_du" src="https://yzinnn.github.io/gukak/audio/buk_du.mp3" preload="auto"></audio>
+    <audio id="audio_janggu_dung" src="https://yzinnn.github.io/gukak/audio/Janggu_dung_1.mp3" preload="auto"></audio>
+    <audio id="audio_janggu_giduk" src="https://yzinnn.github.io/gukak/audio/Janggu_giduk_1.mp3" preload="auto"></audio>
+    <audio id="audio_janggu_kung" src="https://yzinnn.github.io/gukak/audio/Janggu_kung_1.mp3" preload="auto"></audio>
+    <audio id="audio_janggu_durururu" src="https://yzinnn.github.io/gukak/audio/Janggu_durururu_1.mp3" preload="auto"></audio>
+    <audio id="audio_janggu_duk" src="https://yzinnn.github.io/gukak/audio/Janggu_duk_1.mp3" preload="auto"></audio>
     <script>
         const instrumentSounds = {
             kkwaenggari: {
@@ -150,7 +150,11 @@
         function playInstrument(instrument) {
             const soundKeys = Object.keys(instrumentSounds[instrument]);
             const randomKey = soundKeys[Math.floor(Math.random() * soundKeys.length)];
-            instrumentSounds[instrument][randomKey].play();
+            const audioElement = instrumentSounds[instrument][randomKey];
+            audioElement.currentTime = 0; // 오디오 재생을 처음부터 시작하도록 설정
+            audioElement.play().catch(error => {
+                console.error("소리 재생 중 오류 발생: ", error);
+            });
             score += 10;
             document.getElementById('score').textContent = '점수: ' + score;
         }
