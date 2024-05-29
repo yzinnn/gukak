@@ -26,6 +26,7 @@
         }
         #inputForm {
             margin-bottom: 20px;
+            height: 50px; /* 높이를 두 배로 늘림 */
         }
         #gameCanvas {
             border: 1px solid #000;
@@ -50,8 +51,8 @@
             align-items: center;
         }
         #score {
-            margin-top: 10px;
-            font-size: 12px; /* 글씨 크기를 줄임 */
+            margin-top: 3px;
+            font-size: 12px;
         }
     </style>
 </head>
@@ -63,7 +64,7 @@
         <button onclick="startGame()">시작</button>
     </div>
     <p id="score">점수: 0</p>
-    <canvas id="gameCanvas" width="320" height="480"></canvas>
+    <canvas id="gameCanvas" width="320" height="400"></canvas>
     <div id="instrumentContainer">
         <div class="instrument" id="kkwaenggari">
             <img src="Kkwaenggwari.jpg" alt="꽹가리">
@@ -157,7 +158,6 @@
         function playSound(note) {
             for (const instrument in instrumentSounds) {
                 if (instrumentSounds[instrument][note]) {
-                    instrumentSounds[instrument][note].currentTime = 0;  // 소리 딜레이를 줄이기 위해 현재 시간을 0으로 설정
                     instrumentSounds[instrument][note].play();
                 }
             }
@@ -166,7 +166,7 @@
         function drawNotes() {
             ctx.clearRect(0, 0, canvas.width, canvas.height);
             ctx.fillStyle = 'black';
-            ctx.fillRect(0, 400, canvas.width, 10);  // 타점 선을 그림 위로 0.1cm 이동
+            ctx.fillRect(0, 300, canvas.width, 10);  // 타점 선을 그림 위로 0.1cm 이동
             notes.forEach(note => {
                 note.y += 2;
                 ctx.fillStyle = noteColor(note.id);
@@ -187,7 +187,7 @@
         }
 
         function checkHit(instrumentId) {
-            const threshold = 400;
+            const threshold = 300;
             notes = notes.filter(note => {
                 if (note.y > threshold && note.y < threshold + 80 && note.id === instrumentId) {
                     playSound(note.text);
