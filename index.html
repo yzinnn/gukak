@@ -8,8 +8,6 @@
         body {
             font-family: Arial, sans-serif;
             text-align: center;
-            margin: 0;
-            padding: 0;
         }
         .instrument {
             display: inline-block;
@@ -17,8 +15,8 @@
             position: relative;
         }
         .instrument img {
-            width: 100px;
-            height: 100px;
+            width: 50px;
+            height: 50px;
             cursor: pointer;
         }
         .note {
@@ -27,8 +25,7 @@
             height: 50px;
         }
         #inputForm {
-            margin-bottom: 10px;
-            padding-top: 10px;
+            margin-bottom: 20px;
         }
         #gameCanvas {
             border: 1px solid #000;
@@ -39,19 +36,16 @@
         #instrumentContainer {
             display: flex;
             justify-content: center;
-            position: relative;
+            align-items: flex-end;
+            position: absolute;
+            bottom: 0;
+            width: 100%;
+            height: 100px;
         }
         .instrument {
             display: flex;
             flex-direction: column;
             align-items: center;
-        }
-        .hit-line {
-            position: absolute;
-            width: 100%;
-            height: 10px;
-            background-color: black;
-            bottom: 50px;
         }
     </style>
 </head>
@@ -62,6 +56,7 @@
         <input type="text" id="rythmInput" placeholder="예: 갠 지 덩 쿵 덕">
         <button onclick="startGame()">시작</button>
     </div>
+    <canvas id="gameCanvas" width="800" height="600"></canvas>
     <div id="instrumentContainer">
         <div class="instrument" id="kkwaenggari">
             <img src="Kkwaenggwari.jpg" alt="꽹가리">
@@ -80,18 +75,17 @@
             <p>장구</p>
         </div>
     </div>
-    <canvas id="gameCanvas" width="800" height="400"></canvas>
     <p id="score">점수: 0</p>
-    <audio id="audio_kkwaenggwari_gan" src="https://yzinnn.github.io/gukak/audio/Kkwaenggwari_gang_1.mp3" preload="auto"></audio>
-    <audio id="audio_kkwaenggwari_ji" src="https://yzinnn.github.io/gukak/audio/Kkwaenggwari_ji_1.mp3" preload="auto"></audio>
-    <audio id="audio_jing_jing" src="https://yzinnn.github.io/gukak/audio/Jing_1.mp3" preload="auto"></audio>
-    <audio id="audio_buk_dung" src="https://yzinnn.github.io/gukak/audio/buk_dung.mp3" preload="auto"></audio>
-    <audio id="audio_buk_du" src="https://yzinnn.github.io/gukak/audio/buk_du.mp3" preload="auto"></audio>
-    <audio id="audio_janggu_dung" src="https://yzinnn.github.io/gukak/audio/Janggu_dung_1.mp3" preload="auto"></audio>
-    <audio id="audio_janggu_giduk" src="https://yzinnn.github.io/gukak/audio/Janggu_giduk_1.mp3" preload="auto"></audio>
-    <audio id="audio_janggu_kung" src="https://yzinnn.github.io/gukak/audio/Janggu_kung_1.mp3" preload="auto"></audio>
-    <audio id="audio_janggu_durururu" src="https://yzinnn.github.io/gukak/audio/Janggu_durururu_1.mp3" preload="auto"></audio>
-    <audio id="audio_janggu_duk" src="https://yzinnn.github.io/gukak/audio/Janggu_duk_1.mp3" preload="auto"></audio>
+    <audio id="audio_kkwaenggwari_gan" src="Kkwaenggwari_gang_1.mp3" preload="auto"></audio>
+    <audio id="audio_kkwaenggwari_ji" src="Kkwaenggwari_ji_1.mp3" preload="auto"></audio>
+    <audio id="audio_jing_jing" src="jing_1.mp3" preload="auto"></audio>
+    <audio id="audio_buk_dung" src="buk_dung.mp3" preload="auto"></audio>
+    <audio id="audio_buk_du" src="buk_du.mp3" preload="auto"></audio>
+    <audio id="audio_janggu_dung" src="Janggu_dung_1.mp3" preload="auto"></audio>
+    <audio id="audio_janggu_giduk" src="Janggu_giduk_1.mp3" preload="auto"></audio>
+    <audio id="audio_janggu_kung" src="Janggu_kung_1.mp3" preload="auto"></audio>
+    <audio id="audio_janggu_durururu" src="Janggu_durururu_1.mp3" preload="auto"></audio>
+    <audio id="audio_janggu_duk" src="Janggu_duk_1.mp3" preload="auto"></audio>
     <script>
         const instrumentSounds = {
             kkwaenggari: {
@@ -114,7 +108,7 @@
             }
         };
 
-        const instrumentElements = document.querySelectorAll('.instrument img');
+        const instrumentElements = document.querySelectorAll('.instrument');
         const instrumentIds = ['kkwaenggari', 'jing', 'buk', 'janggu'];
 
         let score = 0;
@@ -124,12 +118,19 @@
         const ctx = canvas.getContext('2d');
         let gameInterval;
 
+        instrumentElements.forEach(inst => {
+            inst.addEventListener('click', () => {
+                const id = inst.id;
+                checkHit(id);
+            });
+        });
+
         function startGame() {
             userInput = document.getElementById('rythmInput').value.split(' ');
             notes = userInput.map((note, index) => {
                 const instrument = noteToInstrument(note);
                 const x = instrumentIds.indexOf(instrument) * 200 + 50;
-                return { x: x, y: 0, id: instrument, text: note };
+                return { x: x, y: -50 * (index + 1), id: instrument, text: note };
             });
             score = 0;
             document.getElementById('score').textContent = '점수: ' + score;
@@ -137,10 +138,6 @@
                 clearInterval(gameInterval);
             }
             gameInterval = setInterval(gameLoop, 20);
-        }
-
-        function createNote(instrument, x) {
-            notes.push({ x: x, y: 0, id: instrument, text: '' });
         }
 
         function noteToInstrument(note) {
@@ -151,20 +148,18 @@
             return 'kkwaenggari';
         }
 
-        function playInstrument(instrument) {
-            const soundKeys = Object.keys(instrumentSounds[instrument]);
-            const randomKey = soundKeys[Math.floor(Math.random() * soundKeys.length)];
-            const audioElement = instrumentSounds[instrument][randomKey];
-            audioElement.currentTime = 0; // 오디오 재생을 처음부터 시작하도록 설정
-            audioElement.play().catch(error => {
-                console.error("소리 재생 중 오류 발생: ", error);
-            });
+        function playSound(note) {
+            for (const instrument in instrumentSounds) {
+                if (instrumentSounds[instrument][note]) {
+                    instrumentSounds[instrument][note].play();
+                }
+            }
         }
 
         function drawNotes() {
             ctx.clearRect(0, 0, canvas.width, canvas.height);
             ctx.fillStyle = 'black';
-            ctx.fillRect(0, 350, canvas.width, 10);  // 타점 선을 굵게 설정
+            ctx.fillRect(0, 550, canvas.width, 10);  // 타점 선을 굵게 설정
             notes.forEach(note => {
                 note.y += 2;
                 ctx.fillStyle = noteColor(note.id);
@@ -184,28 +179,26 @@
             }
         }
 
+        function checkHit(instrumentId) {
+            const threshold = 550;
+            notes = notes.filter(note => {
+                if (note.y > threshold && note.y < threshold + 50 && note.id === instrumentId) {
+                    playSound(note.text);
+                    score += 10;
+                    document.getElementById('score').textContent = '점수: ' + score;
+                    return false;
+                }
+                return true;
+            });
+        }
+
         function gameLoop() {
             drawNotes();
             if (notes.length === 0) {
                 clearInterval(gameInterval);
-                alert('게임이 끝났습니다. 점수는 ' + score + '점입니다.');
+                alert('게임 종료! 최종 점수: ' + score);
             }
         }
-
-        // 클릭 이벤트 리스너에 새로운 기능을 추가하겠습니다.
-        instrumentElements.forEach(inst => {
-            inst.addEventListener('click', () => {
-                const id = inst.parentElement.id;
-                const x = instrumentIds.indexOf(id) * 200 + 50;
-                const noteIndex = notes.findIndex(note => note.x === x);
-                if (noteIndex !== -1) {
-                    playInstrument(id); // 악기 소리 재생
-                    score += 10; // 점수 추가
-                    document.getElementById('score').textContent = '점수: ' + score;
-                    notes.splice(noteIndex, 1); // 노트 삭제
-                }
-            });
-        });
     </script>
 </body>
 </html>
