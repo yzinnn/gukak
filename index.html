@@ -26,12 +26,14 @@
         }
         #inputForm {
             margin-bottom: 20px;
+        }
+        #rythmInput {
             height: 50px; /* 높이를 두 배로 늘림 */
         }
         #gameCanvas {
             border: 1px solid #000;
             display: block;
-            margin: 0 auto;
+            margin: 20px auto; /* 여유 공간 추가 */
             position: relative;
             width: 320px;
             height: 400px;
@@ -51,8 +53,8 @@
             align-items: center;
         }
         #score {
-            margin-top: 3px;
-            font-size: 12px;
+            margin-top: 10px; /* 여유 공간 추가 */
+            font-size: 22px; /* 글씨 크기 조정 */
         }
     </style>
 </head>
@@ -166,7 +168,7 @@
         function drawNotes() {
             ctx.clearRect(0, 0, canvas.width, canvas.height);
             ctx.fillStyle = 'black';
-            ctx.fillRect(0, 300, canvas.width, 10);  // 타점 선을 그림 위로 0.1cm 이동
+            ctx.fillRect(0, 290, canvas.width, 5);  // 타점 선을 그림 위로 0.1cm 이동
             notes.forEach(note => {
                 note.y += 2;
                 ctx.fillStyle = noteColor(note.id);
@@ -187,7 +189,7 @@
         }
 
         function checkHit(instrumentId) {
-            const threshold = 300;
+            const threshold = 290;
             notes = notes.filter(note => {
                 if (note.y > threshold && note.y < threshold + 80 && note.id === instrumentId) {
                     playSound(note.text);
