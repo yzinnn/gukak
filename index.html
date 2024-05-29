@@ -46,13 +46,6 @@
             flex-direction: column;
             align-items: center;
         }
-        .hit-line {
-            position: absolute;
-            width: 100%;
-            height: 10px;
-            background-color: black;
-            bottom: 50px;
-        }
     </style>
 </head>
 <body>
@@ -63,26 +56,25 @@
         <button onclick="startGame()">시작</button>
     </div>
     <div id="instrumentContainer">
-        <div class="instrument" id="kkwaenggari">
+        <div class="instrument" id="kkwaenggari" onclick="playInstrument('kkwaenggari')">
             <img src="Kkwaenggwari.jpg" alt="꽹가리">
             <p>꽹가리</p>
         </div>
-        <div class="instrument" id="jing">
+        <div class="instrument" id="jing" onclick="playInstrument('jing')">
             <img src="jing.jpeg" alt="징">
             <p>징</p>
         </div>
-        <div class="instrument" id="buk">
+        <div class="instrument" id="buk" onclick="playInstrument('buk')">
             <img src="buk.png" alt="북">
             <p>북</p>
         </div>
-        <div class="instrument" id="janggu">
+        <div class="instrument" id="janggu" onclick="playInstrument('janggu')">
             <img src="janggu.jpg" alt="장구">
             <p>장구</p>
         </div>
     </div>
-    <canvas id="gameCanvas" width="800" height="400"></canvas>
-    <p id="score">점수: 0</p>
-    <audio id="audio_kkwaenggwari_gan" src="https://yzinnn.github.io/gukak/audio/Kkwaenggwari_gang_1.mp3" preload="auto"></audio>
+    <canvas id="gameCanvas" width="800" height="600"></canvas>
+    <p id="score">점수: 0</p> <audio id="audio_kkwaenggwari_gan" src="https://yzinnn.github.io/gukak/audio/Kkwaenggwari_gang_1.mp3" preload="auto"></audio>
     <audio id="audio_kkwaenggwari_ji" src="https://yzinnn.github.io/gukak/audio/Kkwaenggwari_ji_1.mp3" preload="auto"></audio>
     <audio id="audio_jing_jing" src="https://yzinnn.github.io/gukak/audio/Jing_1.mp3" preload="auto"></audio>
     <audio id="audio_buk_dung" src="https://yzinnn.github.io/gukak/audio/buk_dung.mp3" preload="auto"></audio>
@@ -114,9 +106,6 @@
             }
         };
 
-        const instrumentElements = document.querySelectorAll('.instrument img');
-        const instrumentIds = ['kkwaenggari', 'jing', 'buk', 'janggu'];
-
         let score = 0;
         let notes = [];
         let userInput = '';
@@ -129,7 +118,7 @@
             notes = userInput.map((note, index) => {
                 const instrument = noteToInstrument(note);
                 const x = instrumentIds.indexOf(instrument) * 200 + 50;
-                return { x: x, y: 0, id: instrument, text: note };
+                return { x: x, y: -50 * (index + 1), id: instrument, text: note };
             });
             score = 0;
             document.getElementById('score').textContent = '점수: ' + score;
@@ -137,10 +126,6 @@
                 clearInterval(gameInterval);
             }
             gameInterval = setInterval(gameLoop, 20);
-        }
-
-        function createNote(instrument, x) {
-            notes.push({ x: x, y: 0, id: instrument, text: '' });
         }
 
         function noteToInstrument(note) {
@@ -154,19 +139,13 @@
         function playInstrument(instrument) {
             const soundKeys = Object.keys(instrumentSounds[instrument]);
             const randomKey = soundKeys[Math.floor(Math.random() * soundKeys.length)];
-            const audioElement = instrumentSounds[instrument][randomKey];
-            audioElement.currentTime = 0; // 오디오 재생을 처음부터 시작하도록 설정
-            audioElement.play().catch(error => {
-                console.error("소리 재생 중 오류 발생: ", error);
-            });
+            instrumentSounds[instrument][randomKey].play();
             score += 10;
             document.getElementById('score').textContent = '점수: ' + score;
         }
 
         function drawNotes() {
             ctx.clearRect(0, 0, canvas.width, canvas.height);
-            ctx.fillStyle = 'black';
-            ctx.fillRect(0, 350, canvas.width, 10);  // 타점 선을 굵게 설정
             notes.forEach(note => {
                 note.y += 2;
                 ctx.fillStyle = noteColor(note.id);
@@ -193,16 +172,6 @@
                 alert('게임 종료! 최종 점수: ' + score);
             }
         }
-
-        // 클릭 이벤트 리스너에 새로운 기능을 추가하겠습니다.
-        instrumentElements.forEach(inst => {
-            inst.addEventListener('click', () => {
-                const id = inst.parentElement.id;
-                const x = instrumentIds.indexOf(id) * 200 + 50;
-                playInstrument(id); // 악기 소리 재생
-                createNote(id, x); // 새로운 노트 생성
-            });
-        });
     </script>
 </body>
 </html>
