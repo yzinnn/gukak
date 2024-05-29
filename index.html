@@ -17,6 +17,7 @@
         .instrument img {
             width: 100px;
             height: 100px;
+            cursor: pointer;
         }
         .note {
             position: absolute;
@@ -36,18 +37,12 @@
             display: flex;
             justify-content: center;
             position: relative;
+            margin-top: 20px;
         }
         .instrument {
             display: flex;
             flex-direction: column;
             align-items: center;
-        }
-        .hit-line {
-            position: absolute;
-            width: 100%;
-            height: 10px;
-            background-color: red;
-            bottom: 50px;
         }
     </style>
 </head>
@@ -59,7 +54,6 @@
         <button onclick="startGame()">시작</button>
     </div>
     <canvas id="gameCanvas" width="800" height="600"></canvas>
-    <div class="hit-line" onclick="checkHit(event)"></div>
     <div id="instrumentContainer">
         <div class="instrument" id="kkwaenggari">
             <img src="Kkwaenggwari.jpg" alt="꽹가리">
@@ -154,6 +148,8 @@
 
         function drawNotes() {
             ctx.clearRect(0, 0, canvas.width, canvas.height);
+            ctx.fillStyle = 'black';
+            ctx.fillRect(0, 550, canvas.width, 10);  // 타점 선을 굵게 설정
             notes.forEach(note => {
                 note.y += 2;
                 ctx.fillStyle = noteColor(note.id);
@@ -173,7 +169,7 @@
             }
         }
 
-        function checkHit(event) {
+        function checkHit() {
             const threshold = 550;
             notes.forEach(note => {
                 if (note.y > threshold && note.y < threshold + 50) {
@@ -193,6 +189,8 @@
                 alert('게임 종료! 최종 점수: ' + score);
             }
         }
+
+        canvas.addEventListener('click', checkHit);
     </script>
 </body>
 </html>
