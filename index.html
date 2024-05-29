@@ -169,17 +169,17 @@
             }
         }
 
-        function checkHit() {
+        function checkHit(instrumentId) {
             const threshold = 550;
-            notes.forEach(note => {
-                if (note.y > threshold && note.y < threshold + 50) {
+            notes = notes.filter(note => {
+                if (note.y > threshold && note.y < threshold + 50 && note.id === instrumentId) {
                     playSound(note.text);
                     score += 10;
                     document.getElementById('score').textContent = '점수: ' + score;
-                    note.hit = true;
+                    return false;
                 }
+                return true;
             });
-            notes = notes.filter(note => !note.hit);
         }
 
         function gameLoop() {
@@ -190,7 +190,12 @@
             }
         }
 
-        canvas.addEventListener('click', checkHit);
+        instrumentElements.forEach(inst => {
+            inst.addEventListener('click', () => {
+                const id = inst.parentElement.id;
+                checkHit(id);
+            });
+        });
     </script>
 </body>
 </html>
