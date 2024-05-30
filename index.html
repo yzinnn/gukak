@@ -13,7 +13,7 @@
             display: inline-block;
             margin: 0;
             position: relative;
-            text-align: center; /* 중앙으로 정렬 */
+            text-align: right; /* 오른쪽으로 정렬 */
         }
         .instrument img {
             width: 80px;
@@ -31,7 +31,6 @@
         #rythmInput {
             height: auto;
             overflow: auto;
-            width: 300px; /* 원래 크기로 돌아가기 위해 폭을 지정 */
         }
         #gameCanvas {
             border: 1px solid #000;
@@ -45,16 +44,14 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            margin-top: -20px; /* 게임 캔버스와의 간격을 더 줄이기 위해 음수 값 사용 */
+            position: absolute;
+            top: 360px; /* 게임 캔버스 바로 아래에 위치 */
+            width: 100%;
         }
         .instrument {
             display: flex;
             flex-direction: column;
-            align-items: center; /* 중앙 정렬 */
-        }
-        .instrument p.description {
-            font-size: 12px;
-            color: gray;
+            align-items: center; /* 오른쪽 정렬 */
         }
         #score {
             margin-top: 5px;
@@ -63,23 +60,17 @@
         h1 {
             font-size: 20px;
         }
-        #instructions {
-            font-size: 14px;
-            color: red;
-            margin: 10px 0;
-        }
     </style>
 </head>
 <body>
     <h1>육보 리듬 게임</h1>
-    <p id="instructions">모든 음을 띄워쓰세요. 예: 갠 지 덩 쿵 덕</p>
     <div id="inputForm">
         <label for="rythmInput">육보 입력:</label>
         <textarea id="rythmInput" placeholder="예: 갠 지 덩 쿵 덕" rows="1" oninput="autoGrow(this)"></textarea>
         <button onclick="startGame()">시작</button>
     </div>
     <p id="score">점수: 0</p>
-    <canvas id="gameCanvas" width="320" height="360"></canvas>    
+    <canvas id="gameCanvas" width="320" height="360"></canvas>
     <div id="instrumentContainer">
         <div class="instrument" id="kkwaenggari">
             <img src="kukak/Kkwaenggwari.jpg" alt="꽹가리">
@@ -98,22 +89,17 @@
             <p>장구</p>
         </div>
     </div>
-    <audio id="audio_kkwaenggwari_gan" src="kukak/Kkwaenggwari_gang_1.mp3" preload="auto"></audio>
-    <audio id="audio_kkwaenggwari_ji" src="kukak/Kkwaenggwari_ji_1.mp3" preload="auto"></audio>
-    <audio id="audio_jing_jing" src="kukak/jing_1.mp3" preload="auto"></audio>
-    <audio id="audio_buk_dung" src="kukak/buk_dung.mp3" preload="auto"></audio>
-    <audio id="audio_buk_du" src="kukak/buk_du.mp3" preload="auto"></audio>
-    <audio id="audio_janggu_dung" src="kukak/Janggu_dung_1.mp3" preload="auto"></audio>
-    <audio id="audio_janggu_giduk" src="kukak/Janggu_giduk_1.mp3" preload="auto"></audio>
-    <audio id="audio_janggu_kung" src="kukak/Janggu_kung_1.mp3" preload="auto"></audio>
-    <audio id="audio_janggu_durururu" src="kukak/Janggu_durururu_1.mp3" preload="auto"></audio>
-    <audio id="audio_janggu_duk" src="kukak/Janggu_duk_1.mp3" preload="auto"></audio>
+    <audio id="audio_kkwaenggwari_gan" src="Kkwaenggwari_gang_1.mp3" preload="auto"></audio>
+    <audio id="audio_kkwaenggwari_ji" src="Kkwaenggwari_ji_1.mp3" preload="auto"></audio>
+    <audio id="audio_jing_jing" src="jing_1.mp3" preload="auto"></audio>
+    <audio id="audio_buk_dung" src="buk_dung.mp3" preload="auto"></audio>
+    <audio id="audio_buk_du" src="buk_du.mp3" preload="auto"></audio>
+    <audio id="audio_janggu_dung" src="Janggu_dung_1.mp3" preload="auto"></audio>
+    <audio id="audio_janggu_giduk" src="Janggu_giduk_1.mp3" preload="auto"></audio>
+    <audio id="audio_janggu_kung" src="Janggu_kung_1.mp3" preload="auto"></audio>
+    <audio id="audio_janggu_durururu" src="Janggu_durururu_1.mp3" preload="auto"></audio>
+    <audio id="audio_janggu_duk" src="Janggu_duk_1.mp3" preload="auto"></audio>
     <script>
-        function autoGrow(element) {
-            element.style.height = "5px";
-            element.style.height = (element.scrollHeight)+"px";
-        }
-        
         const instrumentSounds = {
             kkwaenggari: {
                 '갠': document.getElementById('audio_kkwaenggwari_gan'),
