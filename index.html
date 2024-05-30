@@ -31,7 +31,6 @@
         #rythmInput {
             height: auto;
             overflow: auto;
-            width: 300px; /* 원래 크기로 돌아가기 위해 폭을 지정 */
         }
         #gameCanvas {
             border: 1px solid #000;
@@ -102,22 +101,17 @@
             <p class="description">덩, 기덕, 쿵, 더러러러, 덕</p>
         </div>
     </div>
-    <audio id="audio_kkwaenggwari_gan" src="kukak/Kkwaenggwari_gang_1.mp3" preload="auto"></audio>
-    <audio id="audio_kkwaenggwari_ji" src="kukak/Kkwaenggwari_ji_1.mp3" preload="auto"></audio>
-    <audio id="audio_jing_jing" src="kukak/jing_1.mp3" preload="auto"></audio>
-    <audio id="audio_buk_dung" src="kukak/buk_dung.mp3" preload="auto"></audio>
-    <audio id="audio_buk_du" src="kukak/buk_du.mp3" preload="auto"></audio>
-    <audio id="audio_janggu_dung" src="kukak/Janggu_dung_1.mp3" preload="auto"></audio>
-    <audio id="audio_janggu_giduk" src="kukak/Janggu_giduk_1.mp3" preload="auto"></audio>
-    <audio id="audio_janggu_kung" src="kukak/Janggu_kung_1.mp3" preload="auto"></audio>
-    <audio id="audio_janggu_durururu" src="kukak/Janggu_durururu_1.mp3" preload="auto"></audio>
-    <audio id="audio_janggu_duk" src="kukak/Janggu_duk_1.mp3" preload="auto"></audio>
+    <audio id="audio_kkwaenggwari_gan" src="Kkwaenggwari_gang_1.mp3" preload="auto"></audio>
+    <audio id="audio_kkwaenggwari_ji" src="Kkwaenggwari_ji_1.mp3" preload="auto"></audio>
+    <audio id="audio_jing_jing" src="jing_1.mp3" preload="auto"></audio>
+    <audio id="audio_buk_dung" src="buk_dung.mp3" preload="auto"></audio>
+    <audio id="audio_buk_du" src="buk_du.mp3" preload="auto"></audio>
+    <audio id="audio_janggu_dung" src="Janggu_dung_1.mp3" preload="auto"></audio>
+    <audio id="audio_janggu_giduk" src="Janggu_giduk_1.mp3" preload="auto"></audio>
+    <audio id="audio_janggu_kung" src="Janggu_kung_1.mp3" preload="auto"></audio>
+    <audio id="audio_janggu_durururu" src="Janggu_durururu_1.mp3" preload="auto"></audio>
+    <audio id="audio_janggu_duk" src="Janggu_duk_1.mp3" preload="auto"></audio>
     <script>
-        function autoGrow(element) {
-            element.style.height = "5px";
-            element.style.height = (element.scrollHeight)+"px";
-        }
-        
         const instrumentSounds = {
             kkwaenggari: {
                 '갠': document.getElementById('audio_kkwaenggwari_gan'),
@@ -213,23 +207,4 @@
         function checkHit(instrumentId) {
             const threshold = 410;
             notes = notes.filter(note => {
-                if (note.y > threshold && note.y < threshold + 80 && note.id === instrumentId) {
-                    playSound(note.text);
-                    score += 10;
-                    document.getElementById('score').textContent = '점수: ' + score;
-                    return false;
-                }
-                return true;
-            });
-        }
-
-        function gameLoop() {
-            drawNotes();
-            if (notes.length === 0) {
-                clearInterval(gameInterval);
-                alert('게임 종료! 최종 점수: ' + score);
-            }
-        }
-    </script>
-</body>
-</html>
+                if (note.y > threshold && note
